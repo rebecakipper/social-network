@@ -1,3 +1,53 @@
+* {
+    box-sizing: border-box;
+}
 body {
-    background-color: ghostwhite;
+    background-color: rgb(255, 255, 255);
+    font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.logo {
+    height: 300px;
+    object-fit: scale-down;
+}
+
+.registration-form-div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+}
+
+input {
+    padding: 10px 20px;
+    border: 0;
+    box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+    border-radius: 30px;
+    margin: 10px 0;
+    width: 300px;
+}
+input:hover {
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+}
+
+button {
+    padding: 10px 20px;
+    border: 2px solid rgb(171, 171, 171);
+    box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+    border-radius: 30px;
+    margin: 10px 0;
+    width: 150px;
+}
+button:hover {
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
 }
