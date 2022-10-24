@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
 
 export default class Registration extends Component {
     constructor() {
@@ -29,7 +29,7 @@ export default class Registration extends Component {
         // console.log("clicked on submit button");
         e.preventDefault();
         console.log(this.state);
-        fetch("/register.json", {
+        fetch("/reset.json", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -38,7 +38,7 @@ export default class Registration extends Component {
         })
             .then((resp) => resp.json())
             .then((data) => {
-                console.log("data from POST /register.json: ", data);
+                console.log("data from POST /reset.json: ", data);
                 // TODO:
                 // if registration was NOT successful -> render err conditionally
                 if (data.success === true) {
@@ -61,36 +61,13 @@ export default class Registration extends Component {
     render() {
         return (
             <>
-                <h3>Registration</h3>
+                <h3>Reset Password</h3>
                 {this.state.error && (
                     <p className="error">oops! something went wrong!</p>
                 )}
-                <div className="registration-form-div">
+                <div className="login-form-div">
+                    <h4>Please enter the email adress you resgistered with:</h4>
                     <form onSubmit={this.handleSubmit}>
-                        <label className="" htmlFor="first_name">
-                            First name:
-                        </label>
-                        <input
-                            type="text"
-                            name="first_name"
-                            value={this.state.first_name}
-                            placeholder="First name"
-                            required
-                            className="input-welcome"
-                            onChange={(e) => this.handleChange(e)}
-                        />
-                        <label className="" htmlFor="last_name">
-                            Last name:
-                        </label>
-                        <input
-                            type="text"
-                            name="last_name"
-                            value={this.state.last_name}
-                            placeholder="Last name"
-                            required
-                            className="input-welcome"
-                            onChange={(e) => this.handleChange(e)}
-                        />
                         <label className="" htmlFor="email">
                             Email:
                         </label>
@@ -100,28 +77,13 @@ export default class Registration extends Component {
                             value={this.state.email}
                             placeholder="email"
                             required
-                            className="input-welcome"
                             onChange={(e) => this.handleChange(e)}
                         />
-                        <label className="" htmlFor="password">
-                            Password:
-                        </label>
-                        <input
-                            type="password"
-                            name="password"
-                            value={this.state.password}
-                            placeholder="password"
-                            required
-                            className="input-welcome"
-                            onChange={(e) => this.handleChange(e)}
-                        />
-                        <button type="submit">Register</button>
+                        <button type="submit">Submit</button>
                     </form>
                 </div>
 
-                <div>
-                    Already a member? <Link to="/login">Log in!</Link>
-                </div>
+                <div></div>
             </>
         );
     }

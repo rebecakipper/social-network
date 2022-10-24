@@ -29,7 +29,7 @@ export default class Registration extends Component {
         // console.log("clicked on submit button");
         e.preventDefault();
         console.log(this.state);
-        fetch("/register.json", {
+        fetch("/login.json", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -61,36 +61,12 @@ export default class Registration extends Component {
     render() {
         return (
             <>
-                <h3>Registration</h3>
+                <h3>Log in</h3>
                 {this.state.error && (
                     <p className="error">oops! something went wrong!</p>
                 )}
-                <div className="registration-form-div">
+                <div className="login-form-div">
                     <form onSubmit={this.handleSubmit}>
-                        <label className="" htmlFor="first_name">
-                            First name:
-                        </label>
-                        <input
-                            type="text"
-                            name="first_name"
-                            value={this.state.first_name}
-                            placeholder="First name"
-                            required
-                            className="input-welcome"
-                            onChange={(e) => this.handleChange(e)}
-                        />
-                        <label className="" htmlFor="last_name">
-                            Last name:
-                        </label>
-                        <input
-                            type="text"
-                            name="last_name"
-                            value={this.state.last_name}
-                            placeholder="Last name"
-                            required
-                            className="input-welcome"
-                            onChange={(e) => this.handleChange(e)}
-                        />
                         <label className="" htmlFor="email">
                             Email:
                         </label>
@@ -100,7 +76,6 @@ export default class Registration extends Component {
                             value={this.state.email}
                             placeholder="email"
                             required
-                            className="input-welcome"
                             onChange={(e) => this.handleChange(e)}
                         />
                         <label className="" htmlFor="password">
@@ -112,15 +87,15 @@ export default class Registration extends Component {
                             value={this.state.password}
                             placeholder="password"
                             required
-                            className="input-welcome"
                             onChange={(e) => this.handleChange(e)}
                         />
-                        <button type="submit">Register</button>
+                        <button type="submit">Login</button>
                     </form>
                 </div>
 
                 <div>
-                    Already a member? <Link to="/login">Log in!</Link>
+                    Forgot your password?
+                    <Link to="/reset_password">click here!</Link>
                 </div>
             </>
         );

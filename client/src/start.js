@@ -1,5 +1,6 @@
 import ReactDOM from "react-dom";
 import Welcome from "./components/Welcome/index.jsx";
+import App from "./components/App/index.jsx";
 
 ReactDOM.render(<Welcome />, document.querySelector("main"));
 
@@ -11,9 +12,6 @@ fetch("/user/id.json")
             ReactDOM.render(<Welcome />, document.querySelector("main"));
         } else {
             // this means the user is registered cause their browser DID have the right cookie and they should be seeing a logo
-            ReactDOM.render(
-                <img src="/juniper-logo.png" alt="logo" />,
-                document.querySelector("main")
-            );
+            ReactDOM.render(<App />, document.querySelector("main"));
         }
     });
