@@ -35,7 +35,7 @@ module.exports.getUserByEmail = function (email) {
 // A SELECT query to get user data when the app mounts
 module.exports.getUserData = function (id) {
     const sql = `
-        SELECT first_name, last_name, email, profile_picture_url FROM users WHERE id=$1
+        SELECT first_name, last_name, email, profile_picture_url, bio FROM users WHERE id=$1
     `;
     return db
         .query(sql, [id])
@@ -52,6 +52,18 @@ module.exports.updateProfilePicture = function (user_id, profile_picture_url) {
 
     return db
         .query(sql, [user_id, profile_picture_url])
+        .catch((error) =>
+            console.log("error upserting user profile picture", error)
+        );
+};
+
+module.exports.updateBio = function (user_id, bio) {
+    const sql = `UPDATE users
+    SET bio=$2
+    WHERE id=$1;`;
+
+    return db
+        .query(sql, [user_id, bio])
         .catch((error) =>
             console.log("error upserting user profile picture", error)
         );

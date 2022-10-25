@@ -104,9 +104,33 @@ app.post("/upload", uploader.single("file"), upload, function (req, res) {
     const { userId } = req.session;
     const url = "https://s3.amazonaws.com/spicedling/" + req.file.filename;
 
-    db.updateProfilePicture(userId, url).then(() => {
-        res.json({ url });
-    });
+    db.updateProfilePicture(userId, url)
+        .then(() => {
+            res.json({ url });
+        })
+        .catch((error) => {
+            console.log("error updating profile picture", error);
+            return res.json({ success: false });
+        });
+
+    //TODO:handle errors
+});
+
+app.post("/update_bio", (req, res) => {
+    // GET /user endpoint to fetch the current user's data (based on the id in the session cookie)
+    const { userId } = req.session;
+    const { bio } = req.body;
+
+    console.log({ userId, bio });
+
+    db.updateBio(userId, bio)
+        .then(() => {
+            res.json({ bio: bio, succes: true });
+        })
+        .catch((error) => {
+            console.log("error updating bio", error);
+            return res.json({ success: false });
+        });
 
     //TODO:handle errors
 });

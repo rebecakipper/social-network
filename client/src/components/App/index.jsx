@@ -14,7 +14,7 @@ export default class App extends Component {
             last_name: "",
             email: "",
             profile_picture_url: "",
-            bio: null,
+            bio: "",
             isPopupOpen: false,
             mounted: false,
         };
@@ -22,11 +22,10 @@ export default class App extends Component {
         this.togglePopup = this.togglePopup.bind(this);
         this.setProfilePic = this.setProfilePic.bind(this);
         this.updateBio = this.updateBio.bind(this);
+        this.componentDidMount = this.componentDidMount.bind(this);
     }
 
     componentDidMount() {
-        // fetch user info from server
-        // add it to the state!
         fetch("/user")
             .then((resp) => resp.json())
             .then((data) => {
@@ -62,10 +61,25 @@ export default class App extends Component {
     }
 
     updateBio(bio) {
-        // update the state with new profile pic url!
-        this.setState({
-            bio: bio,
-        });
+        console.log("updateBio function  was triggered", bio);
+        fetch("/update_bio", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                bio: bio,
+            }),
+        })
+            .then((response) => response.json())
+            .then((resp) => {
+                console.log(resp.bio);
+                const newBio = resp.bio;
+                this.setState({
+                    bio: newBio,
+                });
+                console.log(this.state);
+            });
     }
 
     render() {

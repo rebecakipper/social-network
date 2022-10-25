@@ -38,7 +38,6 @@ export default class Uploader extends Component {
                 this.props.setProfilePic(newUrl);
                 // the function call above will ALSO cause the uploader to be hidden.
             });
-        console.log("im a log");
     }
 
     render() {

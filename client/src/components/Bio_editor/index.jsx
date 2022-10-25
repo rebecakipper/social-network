@@ -1,13 +1,14 @@
 import { Component } from "react";
 
 export default class Bio_editor extends Component {
+    //camel case
     constructor(props) {
         super(props);
 
         this.state = {
             official_bio: props.bio,
-            draft_bio: null,
             editing: false,
+            value: props.bio,
         };
 
         this.openEditBio = this.openEditBio.bind(this);
@@ -25,28 +26,25 @@ export default class Bio_editor extends Component {
         this.setState({
             editing: false,
         });
-        this.props.updateBio(this.state.draft_bio);
+        this.props.updateBio(this.state.value);
     }
 
     handleChange(e) {
-        this.setState(
-            {
-                [e.target.name]: e.target.value,
-            },
-            () => console.log("this.state: ", this.state)
-        );
+        this.setState({
+            value: e.target.value,
+        });
     }
 
     render() {
         return (
             <>
-                {this.state.official_bio && <p>{this.state.official_bio}</p>}
+                {this.props.bio && <p>{this.props.bio}</p>}
                 {this.state.editing && (
                     <textarea
                         name="draft_bio"
                         cols="60"
                         rows="6"
-                        value={this.state.official_bio}
+                        value={this.state.value}
                         onChange={this.handleChange}
                     ></textarea>
                 )}
