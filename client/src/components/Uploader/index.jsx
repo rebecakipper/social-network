@@ -4,23 +4,31 @@ export default class Uploader extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            profile_picture: "",
+            profile_picture: null,
         };
 
-        // this.togglePopup = this.togglePopup.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChange(file) {
+        this.setState(
+            {
+                profile_picture: file,
+            },
+            () => console.log("this.state: ", this.state)
+        );
     }
 
     handleSubmit(e) {
         e.preventDefault();
-        const form = e.currentTarget;
-        // data of fetch:
 
-        fetch("/upload.json", {
+        const formData = new FormData();
+        formData.append("file", this.state.profile_picture);
+
+        fetch("/upload", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(this.state.profile_picture),
+            body: formData,
         })
             .then((response) => response.json())
             .then((data) => {
@@ -55,10 +63,13 @@ export default class Uploader extends Component {
                             </label>
                             <input
                                 type="file"
+                                accept="image/*"
                                 name="profile_picture"
                                 required
                                 className="upload-input"
-                                onChange={(e) => this.handleChange(e)}
+                                onChange={(e) =>
+                                    this.handleChange(e.target.files[0])
+                                }
                             />
                             <button type="submit">Upload</button>
                         </form>

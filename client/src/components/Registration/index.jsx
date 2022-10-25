@@ -103,13 +103,13 @@ export default class Registration extends Component {
                             className="input-welcome"
                             onChange={(e) => this.handleChange(e)}
                         />
-                        <label className="" htmlFor="password">
+                        <label className="" htmlFor="user_password">
                             Password:
                         </label>
                         <input
                             type="password"
-                            name="password"
-                            value={this.state.password}
+                            name="user_password"
+                            value={this.state.user_password}
                             placeholder="password"
                             required
                             className="input-welcome"

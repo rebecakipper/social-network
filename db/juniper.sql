@@ -7,5 +7,7 @@ CREATE TABLE users(
     email VARCHAR(255) NOT NULL CHECK(email != '') UNIQUE,
     user_password TEXT NOT NULL CHECK (user_password != ''),
     profile_picture_url VARCHAR,
+    bio VARCHAR(255),
+    retrieve_password VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );

@@ -127,3 +127,18 @@ button:hover {
 .exit-button:hover {
     border: 2px solid grey;
 }
+
+.profile-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding: 20px;
+    background-color: antiquewhite;
+
+    width: 90vw;
+}
+
+.bio {
+    background-color: rgb(206, 177, 136);
+    width: 70%;
+}

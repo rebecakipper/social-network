@@ -3,19 +3,25 @@ import { Component } from "react";
 import Logo from "../Logo/index.jsx";
 import Profile_picture from "../Profile_picture/index.jsx";
 import Uploader from "../Uploader/index.jsx";
+import Profile from "../Profile/index.jsx";
 
 export default class App extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             first_name: "",
             last_name: "",
             email: "",
             profile_picture_url: "",
+            bio: null,
             isPopupOpen: false,
+            mounted: false,
         };
 
         this.togglePopup = this.togglePopup.bind(this);
+        this.setProfilePic = this.setProfilePic.bind(this);
+        this.updateBio = this.updateBio.bind(this);
     }
 
     componentDidMount() {
@@ -25,19 +31,15 @@ export default class App extends Component {
             .then((resp) => resp.json())
             .then((data) => {
                 console.log("data from GET /user.json: ", data);
-                this.setState(
-                    {
-                        first_name: "",
-                        last_name: "",
-                        email: "",
-                        profile_picture_url: "",
-                    },
-                    console.log("this.state: ", this.state)
-                );
+                this.setState({
+                    ...data, //spread operator
+                    mounted: true,
+                });
             })
             .catch((err) => {
                 this.setState({
                     error: true,
+                    mounted: true,
                 });
                 console.log(err);
             });
@@ -58,18 +60,41 @@ export default class App extends Component {
         // close the popup!
         this.togglePopup();
     }
+
+    updateBio(bio) {
+        // update the state with new profile pic url!
+        this.setState({
+            bio: bio,
+        });
+    }
+
     render() {
+        if (!this.state.mounted) {
+            return <>loading ...</>;
+        }
+
         return (
             <>
                 <div className="nav">
                     <Logo />
+
                     <Profile_picture
                         profile_picture_url={this.state.profile_picture_url}
                         togglePopup={this.togglePopup}
                     />
                 </div>
                 <div className="main">
-                    <h2>Welcome to Juniper Social, {this.state.userName}</h2>
+                    <h2>Welcome to Juniper Social, {this.state.first_name}</h2>
+
+                    <Profile
+                        first_name={this.state.first_name}
+                        last_name={this.state.last_name}
+                        profile_picture_url={this.state.profile_picture_url}
+                        togglePopup={this.togglePopup}
+                        bio={this.state.bio}
+                        updateBio={this.updateBio}
+                    />
+
                     {this.state.isPopupOpen && (
                         <Uploader
                             togglePopup={this.togglePopup}

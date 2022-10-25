@@ -1,17 +1,14 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
 
-export default class Registration extends Component {
+export default class Login extends Component {
     constructor() {
         super();
         this.state = {
             error: false,
-            first_name: "",
-            last_name: "",
             email: "",
             user_password: "",
         };
-        // One way to bind 'this
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -26,9 +23,8 @@ export default class Registration extends Component {
     }
 
     handleSubmit(e) {
-        // console.log("clicked on submit button");
         e.preventDefault();
-        console.log(this.state);
+        //console.log(this.state);
         fetch("/login.json", {
             method: "POST",
             headers: {
@@ -42,6 +38,7 @@ export default class Registration extends Component {
                 // TODO:
                 // if registration was NOT successful -> render err conditionally
                 if (data.success === true) {
+                    console.log("success");
                     return location.reload();
                 }
                 this.setState({
@@ -75,17 +72,19 @@ export default class Registration extends Component {
                             name="email"
                             value={this.state.email}
                             placeholder="email"
+                            className="input-welcome"
                             required
                             onChange={(e) => this.handleChange(e)}
                         />
-                        <label className="" htmlFor="password">
+                        <label className="" htmlFor="user_password">
                             Password:
                         </label>
                         <input
                             type="password"
-                            name="password"
-                            value={this.state.password}
+                            name="user_password"
+                            value={this.state.user_password}
                             placeholder="password"
+                            className="input-welcome"
                             required
                             onChange={(e) => this.handleChange(e)}
                         />
@@ -94,8 +93,8 @@ export default class Registration extends Component {
                 </div>
 
                 <div>
-                    Forgot your password?
-                    <Link to="/reset_password">click here!</Link>
+                    Forgot your password?{" "}
+                    <Link to="/reset_password">Click here!</Link>
                 </div>
             </>
         );

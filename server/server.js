@@ -6,7 +6,8 @@ const compression = require("compression");
 const path = require("path");
 const db = require("./db");
 const cookieSession = require("cookie-session");
-const { ensureSignedOut } = require("./middlewares");
+const { ensureSignedOut, uploader } = require("./middlewares");
+const { upload } = require("./s3");
 
 app.use(express.json());
 
@@ -29,10 +30,9 @@ app.get("/user/id.json", function (req, res) {
 
 app.post("/register.json", ensureSignedOut, (req, res) => {
     const { first_name, last_name, email, user_password } = req.body;
-    // console.log(first_name, last_name, email, user_password);
 
     bcrypt.hash(user_password).then((hashed_password) => {
-        db.createUser(email, first_name, last_name, hashed_password)
+        db.createUser(first_name, last_name, email, hashed_password)
             .then((id) => {
                 req.session.userId = id;
                 return res.json({ success: true });
@@ -47,17 +47,25 @@ app.post("/register.json", ensureSignedOut, (req, res) => {
 app.post("/login.json", ensureSignedOut, (req, res) => {
     const { email, user_password } = req.body;
 
-    bcrypt.hash(user_password).then((hashed_password) => {
-        db.createUser(email, hashed_password)
-            .then((id) => {
-                req.session.userId = id;
-                return res.json({ success: true });
-            })
-            .catch((error) => {
-                console.log("error registering user", error);
-                return res.json({ success: false });
-            });
-    });
+    db.getUserByEmail(email)
+        .then(([hashed_password, id]) => {
+            const uId = id;
+            bcrypt
+                .authenticate(user_password, hashed_password)
+                .then((result) => {
+                    if (result === true) {
+                        req.session.userId = uId;
+                        return res.json({ success: true });
+                    } else {
+                        console.log("error loging in user");
+                        return res.json({ success: false });
+                    }
+                });
+        })
+        .catch((error) => {
+            console.log("error loging in user", error);
+            return res.json({ success: false });
+        });
 });
 
 app.post("/reset.json", ensureSignedOut, (req, res) => {
@@ -91,16 +99,16 @@ app.get("/user", function (req, res) {
         });
 });
 
-app.post("/upload.json", function (req, res) {
+app.post("/upload", uploader.single("file"), upload, function (req, res) {
     // GET /user endpoint to fetch the current user's data (based on the id in the session cookie)
-    db.getUserData(req.session.userId)
-        .then((userData) => {
-            return res.json(userData);
-        })
-        .catch((error) => {
-            console.log("error getting user data", error);
-            return res.json({ success: false });
-        });
+    const { userId } = req.session;
+    const url = "https://s3.amazonaws.com/spicedling/" + req.file.filename;
+
+    db.updateProfilePicture(userId, url).then(() => {
+        res.json({ url });
+    });
+
+    //TODO:handle errors
 });
 
 app.get("*", function (req, res) {

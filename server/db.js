@@ -25,12 +25,10 @@ module.exports.createUser = function (
 
 module.exports.getUserByEmail = function (email) {
     const sql = `
-        SELECT * FROM users WHERE email=$1 
-        RETURNING id;
-    `;
+        SELECT * FROM users WHERE email=$1;`;
     return db
         .query(sql, [email])
-        .then((result) => result.rows[0].id)
+        .then((result) => [result.rows[0].user_password, result.rows[0].id])
         .catch((error) => console.log("error inserting user", error));
 };
 
@@ -46,3 +44,15 @@ module.exports.getUserData = function (id) {
 };
 
 // An UPDATE query to update the user's profile picture
+
+module.exports.updateProfilePicture = function (user_id, profile_picture_url) {
+    const sql = `UPDATE users
+    SET profile_picture_url = $2
+    WHERE id=$1;`;
+
+    return db
+        .query(sql, [user_id, profile_picture_url])
+        .catch((error) =>
+            console.log("error upserting user profile picture", error)
+        );
+};

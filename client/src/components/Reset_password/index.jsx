@@ -76,6 +76,7 @@ export default class Registration extends Component {
                             name="email"
                             value={this.state.email}
                             placeholder="email"
+                            className="input-welcome"
                             required
                             onChange={(e) => this.handleChange(e)}
                         />
