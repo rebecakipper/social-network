@@ -1,12 +1,16 @@
-export default function ProfilePic({ profile_picture_url, togglePopup }) {
+export default function ProfilePic({
+    profile_picture_url,
+    togglePopup,
+    imageSize,
+}) {
     // const imgSrc = profile_picture_url || "/pizzacat.png";
 
     return (
         <>
-            <button onClick={togglePopup}>
+            <button className="profile-button" onClick={togglePopup}>
                 <img
-                    className="profile-image-small"
-                    src={profile_picture_url}
+                    className={imageSize || "profile-image-small"}
+                    src={profile_picture_url || "/pizzacat.png"}
                     alt="..."
                 />
             </button>

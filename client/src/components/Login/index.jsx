@@ -34,12 +34,10 @@ export default class Login extends Component {
         })
             .then((resp) => resp.json())
             .then((data) => {
-                console.log("data from POST /register.json: ", data);
-                // TODO:
                 // if registration was NOT successful -> render err conditionally
                 if (data.success === true) {
                     console.log("success");
-                    return location.reload();
+                    return location.replace("/");
                 }
                 this.setState({
                     error: true,

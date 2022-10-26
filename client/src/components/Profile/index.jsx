@@ -8,6 +8,7 @@ export default function Profile(props) {
         <>
             <div className="profile-container">
                 <Profile_picture
+                    imageSize="profile-image-big"
                     profile_picture_url={props.profile_picture_url}
                     togglePopup={props.togglePopup}
                 />

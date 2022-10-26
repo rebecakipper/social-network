@@ -42,7 +42,7 @@ export default class Registration extends Component {
                 // TODO:
                 // if registration was NOT successful -> render err conditionally
                 if (data.success === true) {
-                    return location.reload();
+                    return location.replace("/");
                 }
                 this.setState({
                     error: true,

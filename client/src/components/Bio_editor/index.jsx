@@ -8,7 +8,7 @@ export default class Bio_editor extends Component {
         this.state = {
             official_bio: props.bio,
             editing: false,
-            value: props.bio,
+            draftBio: props.bio,
         };
 
         this.openEditBio = this.openEditBio.bind(this);
@@ -26,12 +26,12 @@ export default class Bio_editor extends Component {
         this.setState({
             editing: false,
         });
-        this.props.updateBio(this.state.value);
+        this.props.updateBio(this.state.draftBio);
     }
 
     handleChange(e) {
         this.setState({
-            value: e.target.value,
+            draftBio: e.target.value,
         });
     }
 
@@ -41,10 +41,10 @@ export default class Bio_editor extends Component {
                 {this.props.bio && <p>{this.props.bio}</p>}
                 {this.state.editing && (
                     <textarea
-                        name="draft_bio"
+                        name="draftBio"
                         cols="60"
                         rows="6"
-                        value={this.state.value}
+                        value={this.state.draftBio}
                         onChange={this.handleChange}
                     ></textarea>
                 )}

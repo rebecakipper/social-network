@@ -68,3 +68,33 @@ module.exports.updateBio = function (user_id, bio) {
             console.log("error upserting user profile picture", error)
         );
 };
+
+module.exports.getUsersByFirstCharacters = function (searchString) {
+    const sql = `
+        SELECT id, first_name, last_name, profile_picture_url FROM users WHERE first_name ILIKE $1 OR last_name ILIKE $1 ORDER BY created_at DESC LIMIT 3;`;
+    return db
+        .query(sql, [searchString + "%"])
+        .then((result) => [result.rows])
+        .catch((error) => console.log("error inserting user", error));
+};
+
+// module.exports.getUsersByFirstCharacters = function (searchString) {
+//     const sql = `
+//         SELECT id, first_name, last_name, profile_picture_url FROM users WHERE first_name ILIKE $1;`;
+//     return db
+//         .query(sql, [searchString + "%"])
+//         .then((result) => [result.rows])
+//         .catch((error) => console.log("error inserting user", error));
+// };
+
+module.exports.getLatestUsers = function (searchString) {
+    const sql = `
+        SELECT id, first_name, last_name, profile_picture_url FROM users WHERE first_name ILIKE $1 ;`;
+    return db
+        .query(sql, [searchString + "%"])
+        .then((result) => [result.rows])
+        .catch((error) => console.log("error inserting user", error));
+};
+
+// ORDER BY id DESC
+//             LIMIT 3

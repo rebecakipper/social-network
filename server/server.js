@@ -99,8 +99,33 @@ app.get("/user", function (req, res) {
         });
 });
 
+// app.get("/users", function (req, res) {
+//     db.getLatestUsers()
+//         .then((users) => {
+//             console.log(users);
+//             return res.json(users);
+//         })
+//         .catch((error) => {
+//             console.log("error getting latest users", error);
+//             return res.json({ success: false });
+//         });
+// });
+
+app.get("/users", function (req, res) {
+    const searchString = req.query.q; // "" or "f"
+
+    db.getUsersByFirstCharacters(searchString)
+        .then((userData) => {
+            console.log(userData[0]);
+            return res.json(userData[0]);
+        })
+        .catch((error) => {
+            console.log("error getting user data", error);
+            return res.json({ success: false });
+        });
+});
+
 app.post("/upload", uploader.single("file"), upload, function (req, res) {
-    // GET /user endpoint to fetch the current user's data (based on the id in the session cookie)
     const { userId } = req.session;
     const url = "https://s3.amazonaws.com/spicedling/" + req.file.filename;
 
@@ -133,6 +158,11 @@ app.post("/update_bio", (req, res) => {
         });
 
     //TODO:handle errors
+});
+
+app.post("/logout", (req, res) => {
+    req.session = null;
+    res.sendStatus(200);
 });
 
 app.get("*", function (req, res) {
