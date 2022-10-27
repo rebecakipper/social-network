@@ -89,6 +89,7 @@ app.post("/reset.json", ensureSignedOut, (req, res) => {
 
 app.get("/user", function (req, res) {
     // GET /user endpoint to fetch the current user's data (based on the id in the session cookie)
+
     db.getUserData(req.session.userId)
         .then((userData) => {
             return res.json(userData);
@@ -97,6 +98,24 @@ app.get("/user", function (req, res) {
             console.log("error getting user data", error);
             return res.json({ success: false });
         });
+});
+
+app.get("/showUser/:id", function (req, res) {
+    if (req.params.id == req.session.userId) {
+        return res.json({ self: true });
+    } else {
+        db.getUserData(req.params.id)
+            .then((userData) => {
+                if (!userData) {
+                    return res.json({ noUser: true });
+                }
+                return res.json(userData);
+            })
+            .catch((error) => {
+                console.log("error getting other user data", error);
+                return res.json({ success: false });
+            });
+    }
 });
 
 // app.get("/users", function (req, res) {
@@ -116,7 +135,6 @@ app.get("/users", function (req, res) {
 
     db.getUsersByFirstCharacters(searchString)
         .then((userData) => {
-            console.log(userData[0]);
             return res.json(userData[0]);
         })
         .catch((error) => {

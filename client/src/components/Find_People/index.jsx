@@ -6,17 +6,12 @@ export default function FindPeople() {
     const [searchString, setSearchString] = useState("");
 
     useEffect(() => {
-        console.log(`"Find People" has been rendered!`);
         fetch("/users")
             .then((response) => response.json())
             .then((resp) => {
-                // console.log(resp);
                 setUsers(resp);
-                console.log(users);
             });
     }, []);
-
-    //req.query.page;
 
     useEffect(() => {
         const fetchFrom =
@@ -25,13 +20,11 @@ export default function FindPeople() {
             new URLSearchParams({
                 q: searchString,
             });
-        // console.log(fetchFrom);
+
         fetch(fetchFrom)
             .then((response) => response.json())
             .then((resp) => {
-                console.log(resp);
                 setUsers(resp);
-                // console.log(users);
             });
     }, [searchString]);
 

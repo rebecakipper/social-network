@@ -1,12 +1,7 @@
 import { useState, useEffect } from "react";
 import FoundUserCard from "../FoundUserCard/index.jsx";
 
-export default function FindPeople({ users, imageSize }) {
-    useEffect(() => {
-        console.log(`"userList" has been rendered!`);
-        console.log(users);
-    }, []);
-
+export default function UserList({ users, imageSize }) {
     return (
         <div>
             {users.map((user) => (

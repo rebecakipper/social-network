@@ -6,6 +6,8 @@ import Uploader from "../Uploader/index.jsx";
 import Profile from "../Profile/index.jsx";
 import Logout from "../Logout/index.jsx";
 import Find_People from "../Find_People/index.jsx";
+import OtherProfile from "../OtherProfile/index.jsx";
+
 import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
 // import { Link } from "react-router-dom";
 
@@ -33,7 +35,6 @@ export default class App extends Component {
         fetch("/user")
             .then((resp) => resp.json())
             .then((data) => {
-                console.log("data from GET /user.json: ", data);
                 this.setState({
                     ...data, //spread operator
                     mounted: true,
@@ -141,6 +142,10 @@ export default class App extends Component {
 
                         <Route path="/find-people">
                             <Find_People imageSize="" />
+                        </Route>
+
+                        <Route path="/user/:id">
+                            <OtherProfile imageSize="" />
                         </Route>
                     </main>
                 </BrowserRouter>

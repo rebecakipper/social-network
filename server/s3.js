@@ -2,7 +2,6 @@ require("dotenv").config();
 
 const aws = require("aws-sdk");
 const fs = require("fs");
-//const db = require("./db");
 const secrets = process.env;
 
 const s3 = new aws.S3({
