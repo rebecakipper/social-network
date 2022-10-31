@@ -166,6 +166,15 @@ button:hover {
     background-color: antiquewhite;
     border-radius: 30px;
     width: 90vw;
+    margin-top: 40px;
+}
+.big-profile-container {
+    display: flex;
+    flex-direction: column;
+    background-color: antiquewhite;
+    border-radius: 30px;
+    width: 90vw;
+    margin-top: 40px;
 }
 
 .bio {
@@ -238,4 +247,19 @@ button:hover {
 
 .add-margin {
     margin-bottom: 20px;
+}
+
+a {
+    text-decoration: none;
+    color: rgb(32, 32, 32);
+}
+
+.profile-image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.addFriendButton {
+    margin-left: 80px;
 }

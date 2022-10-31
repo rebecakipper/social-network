@@ -8,7 +8,7 @@ import Logout from "../Logout/index.jsx";
 import Find_People from "../Find_People/index.jsx";
 import OtherProfile from "../OtherProfile/index.jsx";
 
-import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
+import { BrowserRouter, Route, Link } from "react-router-dom";
 // import { Link } from "react-router-dom";
 
 export default class App extends Component {

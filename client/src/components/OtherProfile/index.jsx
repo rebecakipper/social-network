@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+import FriendButton from "../FriendButton/index.jsx";
 
 export default function OtherProfile() {
     const [user, setUser] = useState({});
@@ -24,22 +25,25 @@ export default function OtherProfile() {
 
     return (
         <>
-            <div className="profile-container">
-                <img
-                    className="profile-image-big"
-                    src={user.profile_picture_url || "/pizzacat.png"}
-                    alt="/pizzacat.png"
-                    onError={({ currentTarget }) => {
-                        currentTarget.onerror = null; // prevents looping
-                        currentTarget.src = "/pizzacat.png";
-                    }}
-                />
-                <div className="bio">
-                    <h2>
-                        {user.first_name} {user.last_name}
-                    </h2>
-                    <p>{user.bio || "No Bio yet"}</p>
+            <div className="big-profile-container">
+                <div className="profile-container">
+                    <img
+                        className="profile-image-big"
+                        src={user.profile_picture_url || "/pizzacat.png"}
+                        alt="/pizzacat.png"
+                        onError={({ currentTarget }) => {
+                            currentTarget.onerror = null; // prevents looping
+                            currentTarget.src = "/pizzacat.png";
+                        }}
+                    />
+                    <div className="bio">
+                        <h2>
+                            {user.first_name} {user.last_name}
+                        </h2>
+                        <p>{user.bio || "No Bio yet"}</p>
+                    </div>
                 </div>
+                <FriendButton />
             </div>
         </>
     );
