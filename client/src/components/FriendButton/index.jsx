@@ -1,46 +1,42 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useHistory } from "react-router-dom";
+//import { useHistory } from "react-router-dom";
 
 export default function FriendButton() {
-    const [buttonText, setButtonText] = useState("");
+    const { id } = useParams();
+    const [friendshipStatus, setFriendshipStatus] = useState({});
 
-    //const path = "/showUser/" + id;
-    const handleClick = (userInput) => {
-        return setButtonText(userInput);
+    const sendRequest = () => {
+        const path = "/friendship/" + friendshipStatus.buttonAction + "/" + id;
+        console.log(path);
+
+        fetch(path, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((response) => response.json())
+            .then((resp) => {
+                console.log(resp);
+                return setFriendshipStatus(resp);
+            });
     };
 
     useEffect(() => {
-        // fetch(path)
-        //     .then((response) => response.json())
-        //     .then((resp) => {
-        //         if (resp.self) {
-        //             return history.push("/");
-        //         } else if (resp.noUser) {
-        //             return history.replace("/");
-        //         }
-        //         setUser(resp);
-        //     });
-        setButtonText("Make friend request");
-    }, []);
-
-    useEffect(() => {
-        // fetch(path)
-        //     .then((response) => response.json())
-        //     .then((resp) => {
-        //         if (resp.self) {
-        //             return history.push("/");
-        //         } else if (resp.noUser) {
-        //             return history.replace("/");
-        //         }
-        //         setUser(resp);
-        //     });
-        setButtonText("Make friend request");
+        //on mount
+        const path = "/friendship/" + id;
+        fetch(path)
+            .then((response) => response.json())
+            .then((resp) => {
+                console.log(resp);
+                setFriendshipStatus(resp);
+            });
     }, []);
 
     return (
         <button className="addFriendButton" onClick={sendRequest}>
-            {buttonText}
+            {friendshipStatus.buttonText}
         </button>
     );
 }

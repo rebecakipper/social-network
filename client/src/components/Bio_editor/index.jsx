@@ -66,17 +66,3 @@ export default class Bio_editor extends Component {
         );
     }
 }
-
-// export default function Profile(props) {
-
-//     openEditBio(){
-
-//     }
-
-//     return (
-//         <>
-//             <p>{props.bio}</p>
-//             <button onClick={}>Add bio</button>
-//         </>
-//     );
-// }

@@ -96,5 +96,43 @@ module.exports.getLatestUsers = function (searchString) {
         .catch((error) => console.log("error inserting user", error));
 };
 
-// ORDER BY id DESC
-//             LIMIT 3
+module.exports.getFriendship = (user1, user2) => {
+    const sql = `
+        SELECT * FROM friendships
+        WHERE (sender_id = $1 AND recipient_id = $2)
+        OR (sender_id = $2 AND recipient_id = $1)`;
+    return db
+        .query(sql, [user1, user2])
+        .then((result) => result.rows[0])
+        .catch((error) => console.log("error inserting user", error));
+};
+
+module.exports.insertFriendship = (sender, recipient) => {
+    const sql = `
+    INSERT INTO friendships (sender_id, recipient_id, accepted)
+    VALUES ($1, $2, false)
+    RETURNING id;
+`;
+    return db
+        .query(sql, [sender, recipient])
+        .then((result) => result.rows[0].id)
+        .catch((error) => console.log("error inserting user", error));
+};
+
+module.exports.acceptFriendship = (sender, recipient) => {
+    const sql = `UPDATE friendships
+    SET accepted = true
+    WHERE sender_id=$1 AND recipient_id=$2;`;
+    return db
+        .query(sql, [sender, recipient])
+        .catch((error) => console.log("error inserting user", error));
+};
+
+module.exports.deleteFriendship = (sender, recipient) => {
+    const sql = `DELETE FROM friendships
+    WHERE (sender_id = $1 AND recipient_id = $2)
+    OR (sender_id = $2 AND recipient_id = $1);`;
+    return db
+        .query(sql, [sender, recipient])
+        .catch((error) => console.log("error inserting user", error));
+};

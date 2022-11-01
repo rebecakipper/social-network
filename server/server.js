@@ -178,6 +178,120 @@ app.post("/update_bio", (req, res) => {
     //TODO:handle errors
 });
 
+app.get("/friendship/:id", function (req, res) {
+    const loggedUser = req.session.userId;
+    const otherUser = req.params.id;
+
+    db.getFriendship(loggedUser, otherUser)
+        .then((friendshipStatus) => {
+            if (!friendshipStatus) {
+                console.log(friendshipStatus);
+                return res.json({
+                    friendshipRecords: false,
+                    buttonText: "Add Friend",
+                    buttonAction: "create",
+                });
+            }
+            const { sender_id, accepted } = friendshipStatus;
+            let senderIsSelf;
+            let text;
+            let action;
+
+            if (sender_id === loggedUser) {
+                senderIsSelf = true;
+            } else {
+                senderIsSelf = false;
+            }
+
+            if (senderIsSelf && !accepted) {
+                text = "Cancel request";
+                action = "delete";
+            } else if (!senderIsSelf && !accepted) {
+                text = "Accept request";
+                action = "accept";
+            } else if (accepted) {
+                text = "Unfriend";
+                action = "delete";
+            }
+
+            const response = {
+                friendshipRecords: true,
+                senderIsSelf,
+                accepted: accepted,
+                buttonText: text,
+                buttonAction: action,
+            };
+            return res.json(response);
+        })
+        .catch((error) => {
+            console.log("error getting frienship data", error);
+            return res.json({ success: false });
+        });
+});
+
+app.post("/friendship/create/:id", function (req, res) {
+    const loggedUser = req.session.userId;
+    const otherUser = req.params.id;
+
+    db.insertFriendship(loggedUser, otherUser)
+        .then((id) => {
+            console.log(id);
+            const response = {
+                friendshipRecords: true,
+                senderIsSelf: true,
+                accepted: false,
+                friendshipId: id,
+                buttonText: "Cancel Request",
+                buttonAction: "cancel",
+            };
+            return res.json(response);
+        })
+        .catch((error) => {
+            console.log("error getting frienship data", error);
+            return res.json({ success: false });
+        });
+});
+
+app.post("/friendship/accept/:id", function (req, res) {
+    const loggedUser = req.session.userId;
+    const otherUser = req.params.id;
+
+    db.acceptFriendship(otherUser, loggedUser)
+        .then(() => {
+            const response = {
+                friendshipRecords: true,
+                senderIsSelf: true,
+                accepted: true,
+                buttonText: "Unfriend",
+                buttonAction: "cancel",
+            };
+            return res.json(response);
+        })
+        .catch((error) => {
+            console.log("error getting frienship data", error);
+            return res.json({ success: false });
+        });
+});
+
+app.post("/friendship/delete/:id", function (req, res) {
+    const loggedUser = req.session.userId;
+    const otherUser = req.params.id;
+
+    db.deleteFriendship(loggedUser, otherUser)
+        .then(() => {
+            const response = {
+                friendshipRecords: false,
+                buttonText: "Add friend",
+                buttonAction: "create",
+            };
+            return res.json(response);
+        })
+        .catch((error) => {
+            console.log("error getting frienship data", error);
+            return res.json({ success: false });
+        });
+});
+
 app.post("/logout", (req, res) => {
     req.session = null;
     res.sendStatus(200);
