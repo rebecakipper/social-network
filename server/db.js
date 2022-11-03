@@ -78,15 +78,6 @@ module.exports.getUsersByFirstCharacters = function (searchString) {
         .catch((error) => console.log("error inserting user", error));
 };
 
-// module.exports.getUsersByFirstCharacters = function (searchString) {
-//     const sql = `
-//         SELECT id, first_name, last_name, profile_picture_url FROM users WHERE first_name ILIKE $1;`;
-//     return db
-//         .query(sql, [searchString + "%"])
-//         .then((result) => [result.rows])
-//         .catch((error) => console.log("error inserting user", error));
-// };
-
 module.exports.getLatestUsers = function (searchString) {
     const sql = `
         SELECT id, first_name, last_name, profile_picture_url FROM users WHERE first_name ILIKE $1 ;`;
@@ -134,5 +125,18 @@ module.exports.deleteFriendship = (sender, recipient) => {
     OR (sender_id = $2 AND recipient_id = $1);`;
     return db
         .query(sql, [sender, recipient])
+        .catch((error) => console.log("error inserting user", error));
+};
+
+module.exports.getFriendships = (loggedUser) => {
+    //TODO:finish this query with join tables
+    const sql = `
+    SELECT users.id,first_name,last_name,profile_picture_url,accepted FROM users JOIN friendships 
+    ON (accepted = true AND recipient_id = $1 AND users.id = friendships.sender_id)
+    OR (accepted = true AND sender_id = $1 AND users.id = friendships.recipient_id)
+    OR (accepted = false AND recipient_id = $1 AND users.id = friendships.sender_id);`;
+    return db
+        .query(sql, [loggedUser])
+        .then((result) => result.rows)
         .catch((error) => console.log("error inserting user", error));
 };

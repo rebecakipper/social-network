@@ -160,7 +160,6 @@ app.post("/upload", uploader.single("file"), upload, function (req, res) {
 });
 
 app.post("/update_bio", (req, res) => {
-    // GET /user endpoint to fetch the current user's data (based on the id in the session cookie)
     const { userId } = req.session;
     const { bio } = req.body;
 
@@ -288,6 +287,20 @@ app.post("/friendship/delete/:id", function (req, res) {
         })
         .catch((error) => {
             console.log("error getting frienship data", error);
+            return res.json({ success: false });
+        });
+});
+
+app.get("/friendships", function (req, res) {
+    const loggedUser = req.session.userId;
+
+    db.getFriendships(loggedUser)
+        .then((friendships) => {
+            console.log(friendships);
+            return res.json(friendships);
+        })
+        .catch((error) => {
+            console.log("error getting friendships", error);
             return res.json({ success: false });
         });
 });

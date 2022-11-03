@@ -7,6 +7,9 @@ import Profile from "../Profile/index.jsx";
 import Logout from "../Logout/index.jsx";
 import Find_People from "../Find_People/index.jsx";
 import OtherProfile from "../OtherProfile/index.jsx";
+import Friends from "../Friends/index.jsx";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 import { BrowserRouter, Route, Link } from "react-router-dom";
 // import { Link } from "react-router-dom";
@@ -108,6 +111,9 @@ export default class App extends Component {
                             >
                                 Find People
                             </Link>
+                            <Link className="find-people-link" to="/friends">
+                                Friends
+                            </Link>
                             <Profile_picture
                                 profile_picture_url={
                                     this.state.profile_picture_url
@@ -146,6 +152,10 @@ export default class App extends Component {
 
                         <Route path="/user/:id">
                             <OtherProfile imageSize="" />
+                        </Route>
+
+                        <Route path="/friends">
+                            <Friends />
                         </Route>
                     </main>
                 </BrowserRouter>

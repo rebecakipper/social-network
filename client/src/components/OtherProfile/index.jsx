@@ -3,12 +3,12 @@ import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import FriendButton from "../FriendButton/index.jsx";
 
-export default function OtherProfile() {
+export default function OtherProfile(otherID) {
     const [user, setUser] = useState({});
     let { id } = useParams();
     const history = useHistory();
 
-    const path = "/showUser/" + id;
+    const path = "/showUser/" + (id || otherID);
 
     useEffect(() => {
         fetch(path)

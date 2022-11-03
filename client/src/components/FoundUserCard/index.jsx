@@ -17,7 +17,7 @@ export default function FoundUserCard({ first, last, id, url, imageSize }) {
                         }}
                     />
                     <h1 className="add-padding">
-                        {first} {last}
+                        {first || "Place"} {last || "Holder"}
                     </h1>
                 </div>
             </Link>
