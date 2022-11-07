@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { friendshipsFetch } from "../../redux/actionCreators/friendshipsActions";
+import OtherProfileFriendsPage from "../OtherProfileFriendsPage/index.jsx";
 
 export default function Friends() {
     const dispatch = useDispatch();
@@ -46,22 +47,7 @@ export default function Friends() {
                             className="friendOrWannabe-div friend"
                             key={friend.id}
                         >
-                            <img
-                                className="profile-image-small"
-                                src={
-                                    friend.profile_picture_url ||
-                                    "/pizzacat.png"
-                                }
-                                alt="/pizzacat.png"
-                                onError={({ currentTarget }) => {
-                                    currentTarget.onerror = null; // prevents looping
-                                    currentTarget.src = "/pizzacat.png";
-                                }}
-                            />
-                            <h5>
-                                {friend.first_name} {friend.last_name}
-                            </h5>
-                            {friend.accepted ? <h4>🫂</h4> : <h4> 👤</h4>}
+                            <OtherProfileFriendsPage userObj={friend} />
                         </div>
                     );
                 })}
@@ -74,22 +60,7 @@ export default function Friends() {
                             className="friendOrWannabe-div wannabe"
                             key={wannabe.id}
                         >
-                            <img
-                                className="profile-image-small"
-                                src={
-                                    wannabe.profile_picture_url ||
-                                    "/pizzacat.png"
-                                }
-                                alt="/pizzacat.png"
-                                onError={({ currentTarget }) => {
-                                    currentTarget.onerror = null; // prevents looping
-                                    currentTarget.src = "/pizzacat.png";
-                                }}
-                            />
-                            <h5>
-                                {wannabe.first_name} {wannabe.last_name}
-                            </h5>
-                            {wannabe.accepted ? <h4>🫂</h4> : <h4> 👤</h4>}
+                            <OtherProfileFriendsPage userObj={wannabe} />
                         </div>
                     );
                 })}

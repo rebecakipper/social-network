@@ -140,3 +140,29 @@ module.exports.getFriendships = (loggedUser) => {
         .then((result) => result.rows)
         .catch((error) => console.log("error inserting user", error));
 };
+
+module.exports.getLastMessages = (limit = 10) => {
+    const sql = `SELECT * FROM chat
+    ORDER BY created_at DESC
+    LIMIT $1;`;
+    return db
+        .query(sql, [limit])
+        .then((result) => result.rows)
+        .catch((error) => {
+            console.log("error getting last messages", error);
+        });
+};
+
+module.exports.insertMessage = (uid, message) => {
+    const sql = `
+    INSERT INTO chat (sender_id, message)
+    VALUES ($1, $2)
+    RETURNING *;
+`;
+    return db
+        .query(sql, [uid, message])
+        .then((result) => result.rows[0])
+        .catch((error) => {
+            console.log("error getting inserting message", error);
+        });
+};

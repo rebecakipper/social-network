@@ -5,22 +5,53 @@ const bcrypt = require("./bcrypt");
 const compression = require("compression");
 const path = require("path");
 const db = require("./db");
-const cookieSession = require("cookie-session");
-const { ensureSignedOut, uploader } = require("./middlewares");
+const { ensureSignedOut, uploader, cookieSession } = require("./middlewares");
 const { upload } = require("./s3");
+const server = require("http").Server(app);
+const io = require("socket.io")(server, {
+    allowRequest: (req, callback) =>
+        callback(null, req.headers.referer.startsWith("http://localhost:3000")),
+});
 
 app.use(express.json());
 
 app.use(compression());
 
-app.use(
-    cookieSession({
-        secret: process.env.SESSION_SECRET,
-        maxAge: 1000 * 60 * 60 * 24 * 14,
-        sameSite: true,
-    })
-);
+app.use(cookieSession);
+
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
+
+io.use((socket, next) => {
+    cookieSession(socket.request, socket.request.res, next);
+});
+
+io.on("connection", async (socket) => {
+    console.log("[social:socket] incoming socket connection", socket.id);
+    const { userId } = socket.request.session;
+    if (!userId) {
+        return socket.disconnect(true);
+    }
+
+    // retrieve the latest 10 messages
+    const latestMessages = await db.getLastMessages();
+    console.log(latestMessages);
+    // and send them to the client who has just connected
+    socket.emit("chatMessages", latestMessages);
+
+    // listen for when the connected user sends a message
+    socket.on("chatMessage", async (text) => {
+        // store the message in the db
+
+        const insertedMessage = await db.insertMessage(userId, text);
+        // then broadcast the message to all connected users (included the sender!)
+
+        // hint: you need the sender info (name, picture...) as well
+        // how can you retrieve it?
+        console.log({ insertedMessage });
+
+        return io.emit("chatMessage", insertedMessage);
+    });
+});
 
 app.get("/user/id.json", function (req, res) {
     res.json({
@@ -101,6 +132,7 @@ app.get("/user", function (req, res) {
 });
 
 app.get("/showUser/:id", function (req, res) {
+    console.log("req.params.id", req.params.id);
     if (req.params.id == req.session.userId) {
         return res.json({ self: true });
     } else {
@@ -314,6 +346,7 @@ app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });
 
-app.listen(process.env.PORT || 3001, function () {
-    console.log("I'm listening.");
-});
+// app.listen(process.env.PORT || 3001, function () {
+//     console.log("I'm listening.");
+// });
+server.listen(3001);

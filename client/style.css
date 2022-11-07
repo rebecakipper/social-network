@@ -262,7 +262,7 @@ a {
 }
 
 .addFriendButton {
-    margin-left: 80px;
+    /* margin-left: 80px; */
 }
 
 .friends-container {
@@ -287,6 +287,11 @@ a {
     justify-content: center;
     width: 180px;
     height: 200px;
+    border-radius: 30px;
+}
+.friendOrWannabe-div:hover {
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
 }
 
 .friendOrWannabe-BIGdiv {

@@ -11,3 +11,12 @@ CREATE TABLE users(
     retrieve_password VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
+
+
+CREATE TABLE chat(
+    id SERIAL PRIMARY KEY,
+    sender_id  INTEGER NOT NULL REFERENCES users(id),
+    message TEXT NOT NULL ,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+

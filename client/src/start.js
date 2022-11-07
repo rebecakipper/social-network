@@ -3,6 +3,7 @@ import Welcome from "./components/Welcome/index.jsx";
 import App from "./components/App/index.jsx";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
+import { initSocket } from "../socket";
 
 ReactDOM.render(<Welcome />, document.querySelector("main"));
 
@@ -14,7 +15,7 @@ fetch("/user/id.json")
             ReactDOM.render(<Welcome />, document.querySelector("main"));
         } else {
             // this means the user is registered cause their browser DID have the right cookie and they should be seeing a logo
-
+            initSocket(store);
             ReactDOM.render(
                 <Provider store={store}>
                     <App />
