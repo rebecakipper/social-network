@@ -142,9 +142,10 @@ module.exports.getFriendships = (loggedUser) => {
 };
 
 module.exports.getLastMessages = (limit = 10) => {
-    const sql = `SELECT * FROM chat
+    const sql = `SELECT users.id,first_name,last_name,profile_picture_url,message, chat.created_at FROM chat JOIN users ON sender_id= users.id
     ORDER BY created_at DESC
-    LIMIT $1;`;
+    LIMIT $1
+    ;`;
     return db
         .query(sql, [limit])
         .then((result) => result.rows)
@@ -157,7 +158,7 @@ module.exports.insertMessage = (uid, message) => {
     const sql = `
     INSERT INTO chat (sender_id, message)
     VALUES ($1, $2)
-    RETURNING *;
+    RETURNING * ;
 `;
     return db
         .query(sql, [uid, message])

@@ -305,3 +305,51 @@ a {
 .friend {
     background-color: rgb(232, 255, 198);
 }
+
+.previous-messages-container {
+    padding: 20px;
+    background-color: aliceblue;
+    overflow: scroll;
+    height: 600px;
+    width: 1000px;
+}
+
+.message-container {
+    list-style: none;
+    background-color: rgb(247, 247, 247);
+    margin: 8px;
+    padding: 15px;
+    border-radius: 30px;
+    text-align: left;
+}
+
+.message-container:nth-child(even) {
+    background-color: #ffffff;
+}
+
+.text-container {
+    padding: 15px;
+    margin: 8px;
+    border: 2px solid #ccc;
+    border-radius: 30px;
+    background-color: #f8f8f8;
+    font-size: 16px;
+    flex-grow: 5;
+}
+
+.textarea-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.textarea-container button {
+    height: 40px;
+}
+
+.flex-rows {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
