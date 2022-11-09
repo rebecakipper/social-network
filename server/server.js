@@ -48,8 +48,17 @@ io.on("connection", async (socket) => {
         // hint: you need the sender info (name, picture...) as well
         // how can you retrieve it?
         console.log({ insertedMessage });
+        const { first_name, last_name, profile_picture_url } =
+            await db.getUserData(userId);
+        const messageObj = {
+            ...insertedMessage,
+            first_name,
+            last_name,
+            profile_picture_url,
+        };
+        console.log("messageObj", messageObj);
 
-        return io.emit("chatMessage", insertedMessage);
+        return io.emit("chatMessage", messageObj);
     });
 });
 

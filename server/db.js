@@ -129,7 +129,6 @@ module.exports.deleteFriendship = (sender, recipient) => {
 };
 
 module.exports.getFriendships = (loggedUser) => {
-    //TODO:finish this query with join tables
     const sql = `
     SELECT users.id,first_name,last_name,profile_picture_url,accepted FROM users JOIN friendships 
     ON (accepted = true AND recipient_id = $1 AND users.id = friendships.sender_id)
@@ -142,8 +141,8 @@ module.exports.getFriendships = (loggedUser) => {
 };
 
 module.exports.getLastMessages = (limit = 10) => {
-    const sql = `SELECT users.id,first_name,last_name,profile_picture_url,message, chat.created_at FROM chat JOIN users ON sender_id= users.id
-    ORDER BY created_at DESC
+    const sql = `SELECT chat.id, users.id AS user_id,first_name,last_name,profile_picture_url,message,chat.created_at FROM chat JOIN users ON sender_id= users.id
+    ORDER BY chat.created_at DESC
     LIMIT $1
     ;`;
     return db
@@ -158,7 +157,7 @@ module.exports.insertMessage = (uid, message) => {
     const sql = `
     INSERT INTO chat (sender_id, message)
     VALUES ($1, $2)
-    RETURNING * ;
+    RETURNING id ,sender_id,message , created_at ;
 `;
     return db
         .query(sql, [uid, message])
@@ -167,3 +166,17 @@ module.exports.insertMessage = (uid, message) => {
             console.log("error getting inserting message", error);
         });
 };
+
+// module.exports.getUserDataChat = (uid) => {
+//     const sql = `
+//     INSERT INTO chat (sender_id, message)
+//     VALUES ($1, $2)
+//     RETURNING * ;
+// `;
+//     return db
+//         .query(sql, [uid, message])
+//         .then((result) => result.rows[0])
+//         .catch((error) => {
+//             console.log("error getting inserting message", error);
+//         });
+// };

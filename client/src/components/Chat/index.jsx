@@ -1,13 +1,32 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useState, useEffect, useRef } from "react";
 import { clientSocket } from "../../../socket";
 import Other_profile_picture from "../other_profile_picture/index.jsx";
 
+const formatDate = (date) => {
+    return new Date(date).toLocaleTimeString("en-UK", {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+    });
+};
+
 export default function Chat() {
-    // const dispatch = useDispatch();
-    const messages = useSelector((state) => state.messages);
+    const messages = useSelector((state) => state.messages.slice(0).reverse());
+    // const [reversedMessages, setReversedMessages] = useState([]);
     const [message, setMessage] = useState("");
-    console.log(messages);
+    const listRef = useRef(null);
+    const containerRef = useRef(null);
+
+    // useEffect(() => {
+    //     setReversedMessages(messages.slice(0).reverse());
+    // }, [messages]);
+
+    useEffect(() => {
+        containerRef.current.scrollTop = listRef.current.offsetHeight;
+    }, [messages]);
 
     const onChatKeyDown = (e) => {
         if (e.code === "Enter") {
@@ -26,31 +45,35 @@ export default function Chat() {
 
     return (
         <div className="new-message">
-            <div className="previous-messages-container">
-                <ul>
-                    {messages.map(
-                        ({
+            <div className="previous-messages-container" ref={containerRef}>
+                <ul ref={listRef}>
+                    {messages.map((msg) => {
+                        const {
                             id,
                             message,
                             first_name,
                             last_name,
                             profile_picture_url,
-                        }) => {
-                            return (
-                                <div className="flex-rows">
-                                    <Other_profile_picture
-                                        url={profile_picture_url}
-                                    />
-                                    <li className="message-container" key={id}>
-                                        <h5>
-                                            {first_name} {last_name}
-                                        </h5>
-                                        <p>{message}</p>
-                                    </li>
-                                </div>
-                            );
-                        }
-                    )}
+                            created_at,
+                        } = msg;
+
+                        return (
+                            <div className="flex-rows" key={id}>
+                                <Other_profile_picture
+                                    url={profile_picture_url}
+                                />
+                                <li className="message-container">
+                                    <h5>
+                                        {first_name} {last_name}
+                                    </h5>
+                                    <p className="message-text">{message}</p>
+                                    <p className="smaller">
+                                        {formatDate(created_at)}
+                                    </p>
+                                </li>
+                            </div>
+                        );
+                    })}
                 </ul>
             </div>
             <div className="textarea-container">

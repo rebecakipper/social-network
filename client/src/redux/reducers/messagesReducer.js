@@ -7,7 +7,7 @@ export default function messagesReducer(messages = [], action) {
             return action.payload.messages;
         case CHAT_MESSAGE_RECEIVED:
             // add the new message to the old array
-            return [...messages, action.payload.message];
+            return [action.payload.message, ...messages];
         default:
             return messages;
     }

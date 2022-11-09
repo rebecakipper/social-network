@@ -203,7 +203,7 @@ button:hover {
     flex-direction: row;
     justify-content: space-around;
     align-items: baseline;
-    width: 400px;
+    width: 600px;
 }
 
 .find-people-link {
@@ -300,6 +300,7 @@ a {
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+    max-width: 70vw;
 }
 
 .friend {
@@ -307,11 +308,14 @@ a {
 }
 
 .previous-messages-container {
+    /* display: flex;
+    flex-direction: row-reverse; */
     padding: 20px;
     background-color: aliceblue;
     overflow: scroll;
     height: 600px;
-    width: 1000px;
+    width: 80vw;
+    max-width: 80vw;
 }
 
 .message-container {
@@ -321,6 +325,7 @@ a {
     padding: 15px;
     border-radius: 30px;
     text-align: left;
+    max-width: 60vw;
 }
 
 .message-container:nth-child(even) {
@@ -351,5 +356,12 @@ a {
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: 100%;
+}
+
+.smaller {
+    font-size: xx-small;
+}
+
+.message-text {
+    width: 60vw;
 }
