@@ -70,7 +70,6 @@ export default class App extends Component {
     }
 
     updateBio(bio) {
-        console.log("updateBio function  was triggered", bio);
         fetch("/update_bio", {
             method: "POST",
             headers: {
@@ -82,12 +81,10 @@ export default class App extends Component {
         })
             .then((response) => response.json())
             .then((resp) => {
-                console.log(resp.bio);
                 const newBio = resp.bio;
                 this.setState({
                     bio: newBio,
                 });
-                console.log(this.state);
             });
     }
 

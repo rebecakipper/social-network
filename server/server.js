@@ -12,7 +12,9 @@ const io = require("socket.io")(server, {
     allowRequest: (req, callback) =>
         callback(
             null,
-            req.headers.referer.startsWith("https://junipersocial.onrender.com")
+            req.headers.referer.startsWith(
+                "https://junipersocial.onrender.com/"
+            )
         ),
 });
 
@@ -24,14 +26,13 @@ app.use(cookieSession);
 
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
-// app.use(require("cors")());
+app.use(require("cors")());
 
 io.use((socket, next) => {
     cookieSession(socket.request, socket.request.res, next);
 });
 
 io.on("connection", async (socket) => {
-    console.log("[social:socket] incoming socket connection", socket.id);
     const { userId } = socket.request.session;
     if (!userId) {
         return socket.disconnect(true);
@@ -39,7 +40,6 @@ io.on("connection", async (socket) => {
 
     // retrieve the latest 10 messages
     const latestMessages = await db.getLastMessages();
-    console.log(latestMessages);
     // and send them to the client who has just connected
     socket.emit("chatMessages", latestMessages);
 
@@ -52,7 +52,6 @@ io.on("connection", async (socket) => {
 
         // hint: you need the sender info (name, picture...) as well
         // how can you retrieve it?
-        console.log({ insertedMessage });
         const { first_name, last_name, profile_picture_url } =
             await db.getUserData(userId);
         const messageObj = {
@@ -61,7 +60,6 @@ io.on("connection", async (socket) => {
             last_name,
             profile_picture_url,
         };
-        console.log("messageObj", messageObj);
 
         return io.emit("chatMessage", messageObj);
     });
@@ -146,7 +144,6 @@ app.get("/user", function (req, res) {
 });
 
 app.get("/showUser/:id", function (req, res) {
-    console.log("req.params.id", req.params.id);
     if (req.params.id == req.session.userId) {
         return res.json({ self: true });
     } else {
@@ -208,9 +205,6 @@ app.post("/upload", uploader.single("file"), upload, function (req, res) {
 app.post("/update_bio", (req, res) => {
     const { userId } = req.session;
     const { bio } = req.body;
-
-    console.log({ userId, bio });
-
     db.updateBio(userId, bio)
         .then(() => {
             res.json({ bio: bio, succes: true });
@@ -230,7 +224,6 @@ app.get("/friendship/:id", function (req, res) {
     db.getFriendship(loggedUser, otherUser)
         .then((friendshipStatus) => {
             if (!friendshipStatus) {
-                console.log(friendshipStatus);
                 return res.json({
                     friendshipRecords: false,
                     buttonText: "Add Friend",
@@ -280,7 +273,6 @@ app.post("/friendship/create/:id", function (req, res) {
 
     db.insertFriendship(loggedUser, otherUser)
         .then((id) => {
-            console.log(id);
             const response = {
                 friendshipRecords: true,
                 senderIsSelf: true,
@@ -342,7 +334,6 @@ app.get("/friendships", function (req, res) {
 
     db.getFriendships(loggedUser)
         .then((friendships) => {
-            console.log(friendships);
             return res.json(friendships);
         })
         .catch((error) => {
@@ -360,7 +351,4 @@ app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });
 
-// app.listen(process.env.PORT || 3001, function () {
-//     console.log("I'm listening.");
-// });
 server.listen(3001);

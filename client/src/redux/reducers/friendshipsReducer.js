@@ -3,7 +3,6 @@ export function friendshipsReducer(friendships = [], action) {
         return [...friendships, ...action.payload];
     } else if (action.type === "friendships/accept") {
         const newFriend = friendships.map((friend) => {
-            console.log(friend);
             if (friend.id === action.payload.id) {
                 return { ...friend, accepted: true };
             }
