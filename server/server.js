@@ -10,7 +10,10 @@ const { upload } = require("./s3");
 const server = require("http").Server(app);
 const io = require("socket.io")(server, {
     allowRequest: (req, callback) =>
-        callback(null, req.headers.referer.startsWith("http://localhost:3000")),
+        callback(
+            null,
+            req.headers.referer.startsWith("https://junipersocial.onrender.com")
+        ),
 });
 
 app.use(express.json());
@@ -21,7 +24,7 @@ app.use(cookieSession);
 
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
-app.use(require("cors")());
+// app.use(require("cors")());
 
 io.use((socket, next) => {
     cookieSession(socket.request, socket.request.res, next);
