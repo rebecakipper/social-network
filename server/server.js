@@ -7,15 +7,11 @@ const path = require("path");
 const db = require("./db");
 const { ensureSignedOut, uploader, cookieSession } = require("./middlewares");
 const { upload } = require("./s3");
+const { SOCKET_REQ_HEADER } = process.env;
 const server = require("http").Server(app);
 const io = require("socket.io")(server, {
     allowRequest: (req, callback) =>
-        callback(
-            null,
-            req.headers.referer.startsWith(
-                "https://junipersocial.onrender.com/"
-            )
-        ),
+        callback(null, req.headers.referer.startsWith(SOCKET_REQ_HEADER)),
 });
 
 app.use(express.json());
@@ -37,21 +33,13 @@ io.on("connection", async (socket) => {
     if (!userId) {
         return socket.disconnect(true);
     }
-
-    // retrieve the latest 10 messages
     const latestMessages = await db.getLastMessages();
-    // and send them to the client who has just connected
+
     socket.emit("chatMessages", latestMessages);
 
-    // listen for when the connected user sends a message
     socket.on("chatMessage", async (text) => {
-        // store the message in the db
-
         const insertedMessage = await db.insertMessage(userId, text);
-        // then broadcast the message to all connected users (included the sender!)
 
-        // hint: you need the sender info (name, picture...) as well
-        // how can you retrieve it?
         const { first_name, last_name, profile_picture_url } =
             await db.getUserData(userId);
         const messageObj = {
@@ -131,8 +119,6 @@ app.post("/reset.json", ensureSignedOut, (req, res) => {
 });
 
 app.get("/user", function (req, res) {
-    // GET /user endpoint to fetch the current user's data (based on the id in the session cookie)
-
     db.getUserData(req.session.userId)
         .then((userData) => {
             return res.json(userData);
