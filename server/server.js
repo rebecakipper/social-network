@@ -21,6 +21,8 @@ app.use(cookieSession);
 
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
 
+app.use(require("cors")());
+
 io.use((socket, next) => {
     cookieSession(socket.request, socket.request.res, next);
 });
