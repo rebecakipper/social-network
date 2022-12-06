@@ -8,7 +8,6 @@ export default function FriendButton() {
 
     const sendRequest = () => {
         const path = "/friendship/" + friendshipStatus.buttonAction + "/" + id;
-        console.log(path);
 
         fetch(path, {
             method: "POST",
@@ -18,7 +17,6 @@ export default function FriendButton() {
         })
             .then((response) => response.json())
             .then((resp) => {
-                console.log(resp);
                 return setFriendshipStatus(resp);
             });
     };
@@ -29,7 +27,6 @@ export default function FriendButton() {
         fetch(path)
             .then((response) => response.json())
             .then((resp) => {
-                console.log(resp);
                 // FIXME: here I do not know how the response looks like and how the state looks like
                 // better only get a status from BE and do the mapping on the FE
                 // button action and button text is a FE responsibility not a BE

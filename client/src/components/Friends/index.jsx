@@ -32,7 +32,6 @@ export default function Friends() {
         fetch("/friendships") //TODO:use the BE endpoint URL
             .then((resp) => resp.json())
             .then((data) => {
-                console.log(data);
                 dispatch(friendshipsFetch(data));
             });
     }, []);
