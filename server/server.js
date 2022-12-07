@@ -11,7 +11,7 @@ const SOCKET_REQ_HEADER = process.env.SOCKET_REQ_HEADER;
 const server = require("http").Server(app);
 const io = require("socket.io")(server, {
     allowRequest: (req, callback) =>
-        callback(null, req.headers.referer.startsWith(SOCKET_REQ_HEADER)),
+        callback(null, req.headers.referer.startsWith(`${SOCKET_REQ_HEADER}`)),
 });
 app.use(express.json());
 
