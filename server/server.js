@@ -7,13 +7,12 @@ const path = require("path");
 const db = require("./db");
 const { ensureSignedOut, uploader, cookieSession } = require("./middlewares");
 const { upload } = require("./s3");
-const { SOCKET_REQ_HEADER } = process.env;
+const SOCKET_REQ_HEADER = process.env.SOCKET_REQ_HEADER;
 const server = require("http").Server(app);
 const io = require("socket.io")(server, {
     allowRequest: (req, callback) =>
         callback(null, req.headers.referer.startsWith(SOCKET_REQ_HEADER)),
 });
-
 app.use(express.json());
 
 app.use(compression());
